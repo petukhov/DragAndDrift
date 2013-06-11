@@ -14,7 +14,6 @@ local carClass = require "car"
 local physics = require "physics"
 physics.start();
 physics.setGravity(0,0)
-
 local bkg = display.newImage("racingtrack.png")
 local physicsData = (require "physicsboundary").physicsData(1.0)
 
