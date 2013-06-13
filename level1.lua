@@ -39,12 +39,6 @@ physics.addBody(newCar.carImage, "dynamic")
 
 local pressed = false
 
---for smoke effect
-local emitter = require("emitter")
-local mainGroup = display.newGroup()
-local emit1
-local i
-
 function onTouch(event)
 	local distX = event.x - newCar.carImage.x
 	local distY = event.y - newCar.carImage.y
@@ -70,27 +64,6 @@ function gameLoop(event)
 	end
 end
 
-local function init()
-
-emit1 = emitter.createEmitter(300,  50,  1500, 0.1, 0)
-emitter.setColor(emit1,200,200,200)
-
-end
-
-
-local function burst()
-
-    for i = 1,10 do
-		emitter.emit(emit1, mainGroup, newCar.carImage.x, newCar.carImage.y)   
-		
-	end	
-	
-	
-end
-
-
-
-
 local function onCollision( event )
        audio.play(sounds.bump)
 end
@@ -98,9 +71,6 @@ end
 Runtime:addEventListener("touch", onTouch)
 Runtime:addEventListener("enterFrame", gameLoop) 
 Runtime:addEventListener( "collision", onCollision )
-Runtime:addEventListener("collision", burst)
-
-init()
 
 
 -----------------------------------------------------------------------------------------
