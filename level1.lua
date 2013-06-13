@@ -71,34 +71,25 @@ function gameLoop(event)
 end
 
 local function init()
-
-emit1 = emitter.createEmitter(300,  50,  1500, 0.1, 0)
-emitter.setColor(emit1,200,200,200)
-
+	emit1 = emitter.createEmitter(300,  50,  1500, 0.1, 0)
+	emitter.setColor(emit1,200,200,200)
 end
 
 
 local function burst()
-
     for i = 1,10 do
 		emitter.emit(emit1, mainGroup, newCar.carImage.x, newCar.carImage.y)   
-		
 	end	
-	
-	
 end
-
-
-
 
 local function onCollision( event )
        audio.play(sounds.bump)
+       burst()
 end
 
 Runtime:addEventListener("touch", onTouch)
 Runtime:addEventListener("enterFrame", gameLoop) 
 Runtime:addEventListener( "collision", onCollision )
-Runtime:addEventListener("collision", burst)
 
 init()
 
