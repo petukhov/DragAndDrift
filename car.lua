@@ -31,6 +31,13 @@ function car.new(name, topSpeed)
 	newcar.carSpeed=0 
 	newcar.carAcc=0
 
+	newcar.engineForce=0 --force applied by the engine
+	newcar.airDragC=0.4257 --air resistance constant
+	newcar.rrC=12.8 --rolling resistance of the tires
+	newcar.mass = 1500
+
+	prevTime = system.getTimer()
+	currentTime = 0
 	return setmetatable(newcar, car)
 end
 
@@ -39,10 +46,39 @@ function car:printName()
 end
 
 function car:nextFrame()
-	self.carSpeed = self.carSpeed + self.carAcc/4
-	self.carSpeed = self.carSpeed*0.9
+
+	--uncomment the code below to enable previous control mode
+	--it goes along with car:move(..) function
+
+	--self.carSpeed = self.carSpeed + self.carAcc/4
+	--self.carSpeed = self.carSpeed*0.9
+	local fTraction = self.engineForce
+	local fAirDrag = -self.airDragC*self.carSpeed*self.carSpeed
+	local fRR = -self.rrC*self.carSpeed
+	local fLong = fTraction+fAirDrag+fRR
+	self.carAccX = fLong/self.mass
+	local dt = getDeltaTime()
+	self.carSpeed = self.carSpeed+dt*self.carAccX
+	if self.carSpeed<0.1 and self.carAccX<0 then
+		self.carSpeed = 0
+	end
+	self.carImage.x = self.carImage.x+dt*self.carSpeed
+	print(self.carSpeed)
 end
 
+function getDeltaTime()
+	currentTime = system.getTimer()
+	dt = (currentTime-prevTime)/1000 --should be '1000' in order to integrate in seconds
+	prevTime = currentTime
+	--print(dt)
+	return dt
+end
+
+function car:increaseEngForce()
+	self.engineForce = self.engineForce+3
+end
+
+--the code in this function is obsolete
 function car:move(currentTouchX, currentTouchY)
 	local distX = currentTouchX - self.carImage.x
 	local distY = currentTouchY - self.carImage.y
@@ -70,7 +106,7 @@ function car:move(currentTouchX, currentTouchY)
 end
 
 function car:accZero()
-	self.carAcc = 0
+	self.engineForce = 0
 end
 
 return car

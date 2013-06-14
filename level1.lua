@@ -35,16 +35,19 @@ local newCar = carClass.new("racer")
 -- useful declarations
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
 
-physics.addBody(newCar.carImage, "dynamic")
+--physics.addBody(newCar.carImage, "dynamic")
 
 local pressed = false
 
 function onTouch(event)
-	local distX = event.x - newCar.carImage.x
-	local distY = event.y - newCar.carImage.y
-	local dist = math.sqrt(distX^2+distY^2)
-	currentTouchX = event.x
-	currentTouchY = event.y
+	--uncomment the code below in order to enable finger drag control
+
+	--local distX = event.x - newCar.carImage.x
+	--local distY = event.y - newCar.carImage.y
+	--local dist = math.sqrt(distX^2+distY^2)
+	--currentTouchX = event.x
+	--currentTouchY = event.y
+
 	if event.phase == "began" then
 		pressed = true
 	elseif event.phase == "moved" then
@@ -58,7 +61,8 @@ end
 function gameLoop(event)
 	newCar:nextFrame()
 	if pressed then
-		newCar:move(currentTouchX, currentTouchY)
+		--newCar:move(currentTouchX, currentTouchY)
+		newCar:increaseEngForce()
 	else 
 		newCar:accZero()
 	end
@@ -70,7 +74,7 @@ end
 
 Runtime:addEventListener("touch", onTouch)
 Runtime:addEventListener("enterFrame", gameLoop) 
-Runtime:addEventListener( "collision", onCollision )
+Runtime:addEventListener("collision", onCollision )
 
 
 -----------------------------------------------------------------------------------------
